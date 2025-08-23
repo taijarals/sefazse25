@@ -76,7 +76,7 @@ if "syllabus" not in st.session_state:
 
 # --- FILTROS ---
 st.subheader("Filtrar por:")
-areas = st.multiselect("Área", options=st.session_state.syllabus["Área"].unique(), default=st.session_state.syllabus["Área"].unique())
+areas = st.multiselect("area", options=st.session_state.syllabus["area"].unique(), default=st.session_state.syllabus["area"].unique())
 grupos = st.multiselect("Grupo", options=st.session_state.syllabus["Grupo"].unique(), default=st.session_state.syllabus["Grupo"].unique())
 
 # Aplica filtros
