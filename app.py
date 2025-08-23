@@ -93,6 +93,6 @@ for idx in edited_df.index:
     st.session_state.syllabus.loc[idx] = edited_df.loc[idx]
 
 # Resumo
-concluidos = edited_df["Concluído"].sum()
+concluidos = edited_df["Concluido"].sum()
 total = len(edited_df)
 st.success(f"📌 Você concluiu {concluidos}/{total} tópicos do edital!")
