@@ -77,12 +77,12 @@ if "syllabus" not in st.session_state:
 # --- FILTROS ---
 st.subheader("Filtrar por:")
 areas = st.multiselect("area", options=st.session_state.syllabus["area"].unique(), default=st.session_state.syllabus["area"].unique())
-grupos = st.multiselect("Grupo", options=st.session_state.syllabus["Grupo"].unique(), default=st.session_state.syllabus["Grupo"].unique())
+grupos = st.multiselect("grupo", options=st.session_state.syllabus["grupo"].unique(), default=st.session_state.syllabus["grupo"].unique())
 
 # Aplica filtros
 filtered_df = st.session_state.syllabus[
     (st.session_state.syllabus["area"].isin(areas)) &
-    (st.session_state.syllabus["Grupo"].isin(grupos))
+    (st.session_state.syllabus["grupo"].isin(grupos))
 ]
 
 # Exibe editor com filtro aplicado
