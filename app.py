@@ -27,7 +27,7 @@ if "progress" not in st.session_state:
 with col2:
     st.subheader("Progresso Geral")
     st.progress(st.session_state.progress / 100)
-    st.write(f"{st.session_state.progress}% concluído")
+    st.write(f"{st.session_state.progress}% concluido")
 
 # Foco do dia
 with col3:
@@ -93,6 +93,6 @@ for idx in edited_df.index:
     st.session_state.syllabus.loc[idx] = edited_df.loc[idx]
 
 # Resumo
-concluidos = edited_df["Concluido"].sum()
+concluidos = edited_df["concluido"].sum()
 total = len(edited_df)
 st.success(f"📌 Você concluiu {concluidos}/{total} tópicos do edital!")
