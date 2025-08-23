@@ -1,39 +1,78 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+import plotly.express as px
+from datetime import date, datetime
 
-# Título
-st.title("📚 Acompanhamento de Estudos")
+st.set_page_config(page_title="Plano de Voo: Auditor TI SEFAZ/SE", layout="wide")
 
-# Sessão para adicionar estudo
-st.header("➕ Adicionar registro de estudo")
-with st.form("form_estudo"):
-    materia = st.text_input("Matéria/Assunto")
-    tempo = st.number_input("Tempo de estudo (em horas)", min_value=0.5, step=0.5)
-    data = st.date_input("Data", datetime.today())
-    submit = st.form_submit_button("Salvar")
+# ======= HEADER =======
+st.title("🚀 Plano de Voo: SEFAZ/SE")
+st.markdown("Foco, força e fé na sua aprovação!")
 
-# Inicializa histórico na sessão
-if "historico" not in st.session_state:
-    st.session_state["historico"] = []
+# ======= PAINEL =======
+st.header("📊 Painel de Controle")
 
-# Salva registro
-if submit and materia and tempo:
-    st.session_state["historico"].append({
-        "Matéria": materia,
-        "Tempo (h)": tempo,
-        "Data": data.strftime("%d/%m/%Y")
+col1, col2, col3 = st.columns(3)
+
+# Contagem regressiva
+exam_date = date(2025, 9, 28)
+days_left = (exam_date - date.today()).days
+with col1:
+    st.subheader("Contagem Regressiva")
+    st.metric("Dias até a prova", f"{days_left} dias")
+
+# Progresso geral
+if "progress" not in st.session_state:
+    st.session_state.progress = 0
+with col2:
+    st.subheader("Progresso Geral")
+    st.progress(st.session_state.progress / 100)
+    st.write(f"{st.session_state.progress}% concluído")
+
+# Foco do dia
+with col3:
+    st.subheader("Foco do Dia")
+    st.info("📌 Direito Tributário")
+
+# ======= ANÁLISE =======
+st.header("📈 Análise Estratégica do Edital")
+
+exam_data = {
+    "Prova": ["Conhecimentos Específicos II (TI - P3)", "Prova Discursiva (TI - P4)", "Conhecimentos Específicos I (P2)", "Conhecimentos Gerais (P1)"],
+    "Peso": [90, 80, 100, 10]
+}
+df_exam = pd.DataFrame(exam_data)
+fig = px.pie(df_exam, names="Prova", values="Peso", title="Distribuição de Pontos no Concurso")
+st.plotly_chart(fig, use_container_width=True)
+
+# ======= CRONOGRAMA =======
+st.header("📅 Cronograma de Estudos")
+
+schedule = {
+    "Segunda": ["Português", "Raciocínio Lógico", "Exercícios"],
+    "Terça": ["Constitucional", "Contabilidade", "Admin"],
+    "Quarta": ["Custos", "Exercícios", "Empresarial"],
+    "Quinta": ["AFO", "Exercícios", "Sergipe"],
+    "Sexta": ["Revisão", "Exercícios", "Tributário"],
+}
+df_schedule = pd.DataFrame(schedule, index=["Manhã", "Tarde", "Noite"])
+st.dataframe(df_schedule)
+
+# ======= EDITAL =======
+st.header("📖 Edital Verticalizado")
+
+if "syllabus" not in st.session_state:
+    st.session_state.syllabus = pd.DataFrame({
+        "Código": [1, 2, 3],
+        "Área": ["LEGISLAÇÃO TRIBUTÁRIA", "AUDITORIA", "DIREITO TRIBUTÁRIO"],
+        "Assunto": ["Lei ICMS", "NBC TA", "CTN"],
+        "Concluído": [False, False, False]
     })
-    st.success("✅ Registro adicionado!")
 
-# Mostra histórico
-st.header("📊 Histórico de Estudos")
-if st.session_state["historico"]:
-    df = pd.DataFrame(st.session_state["historico"])
-    st.dataframe(df)
+edited_df = st.data_editor(st.session_state.syllabus, num_rows="dynamic", use_container_width=True)
+st.session_state.syllabus = edited_df
 
-    # Estatísticas
-    total_horas = df["Tempo (h)"].sum()
-    st.metric("Total de horas estudadas", f"{total_horas:.1f}h")
-else:
-    st.info("Nenhum estudo registrado ainda.")
+# Resumo
+concluidos = edited_df["Concluído"].sum()
+total = len(edited_df)
+st.success(f"📌 Você concluiu {concluidos}/{total} tópicos do edital!")
