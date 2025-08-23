@@ -65,7 +65,8 @@ import pandas as pd
 import streamlit as st
 
 if "syllabus" not in st.session_state:
-    st.session_state.syllabus = pd.read_csv("syllabus.txt")
+    #st.session_state.syllabus = pd.read_csv("syllabus.txt")
+    st.session_state.syllabus = pd.read_csv("syllabus.txt", sep=",")
 
 
 #if "syllabus" not in st.session_state:
