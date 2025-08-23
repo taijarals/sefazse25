@@ -81,7 +81,7 @@ grupos = st.multiselect("Grupo", options=st.session_state.syllabus["Grupo"].uniq
 
 # Aplica filtros
 filtered_df = st.session_state.syllabus[
-    (st.session_state.syllabus["Área"].isin(areas)) &
+    (st.session_state.syllabus["area"].isin(areas)) &
     (st.session_state.syllabus["Grupo"].isin(grupos))
 ]
 
