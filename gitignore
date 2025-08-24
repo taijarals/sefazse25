@@ -1,0 +1,12 @@
+# Pastas do Python
+__pycache__/
+*.pyc
+
+# Arquivos de dados locais
+syllabus.csv
+
+# Secrets
+.secrets/secrets.toml
+
+# Logs
+*.log
