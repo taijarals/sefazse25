@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from datetime import date
+import requests
+import io
 
 # Configuração da página
 st.set_page_config(page_title="Plano de Voo: Auditor TI SEFAZ/SE", layout="wide")
@@ -39,7 +41,8 @@ with col3:
 st.header("📈 Análise Estratégica do Edital")
 
 exam_data = {
-    "Prova": ["Conhecimentos Específicos II (TI - P3)", "Prova Discursiva (TI - P4)", "Conhecimentos Específicos I (P2)", "Conhecimentos Gerais (P1)"],
+    "Prova": ["Conhecimentos Específicos II (TI - P3)", "Prova Discursiva (TI - P4)",
+              "Conhecimentos Específicos I (P2)", "Conhecimentos Gerais (P1)"],
     "Peso": [90, 80, 100, 10]
 }
 df_exam = pd.DataFrame(exam_data)
@@ -62,17 +65,27 @@ st.dataframe(df_schedule)
 # ======= EDITAL =======
 st.header("📖 Edital Verticalizado")
 
-# URL da planilha do Google Sheets
+# URL da planilha pública do Google Sheets
 sheet_url = "https://docs.google.com/spreadsheets/d/1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg/export?format=csv&id=1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg&gid=0"
 
-# Carregar dados da planilha
+# Carregar dados com requests + io.StringIO
 if "syllabus" not in st.session_state:
-    st.session_state.syllabus = pd.read_csv(sheet_url)
+    response = requests.get(sheet_url)
+    response.raise_for_status()  # Garante que a requisição deu certo
+    st.session_state.syllabus = pd.read_csv(io.StringIO(response.text))
 
 # --- FILTROS ---
 st.subheader("Filtrar por:")
-areas = st.multiselect("Área", options=st.session_state.syllabus["area"].unique(), default=st.session_state.syllabus["area"].unique())
-grupos = st.multiselect("Grupo", options=st.session_state.syllabus["grupo"].unique(), default=st.session_state.syllabus["grupo"].unique())
+areas = st.multiselect(
+    "Área",
+    options=st.session_state.syllabus["area"].unique(),
+    default=st.session_state.syllabus["area"].unique()
+)
+grupos = st.multiselect(
+    "Grupo",
+    options=st.session_state.syllabus["grupo"].unique(),
+    default=st.session_state.syllabus["grupo"].unique()
+)
 
 # Aplica filtros
 filtered_df = st.session_state.syllabus[
