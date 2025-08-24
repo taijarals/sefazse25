@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from datetime import date
-import requests
-import io
+import gspread
+from google.oauth2.service_account import Credentials
 
 # Configuração da página
 st.set_page_config(page_title="Plano de Voo: Auditor TI SEFAZ/SE", layout="wide")
@@ -65,14 +65,23 @@ st.dataframe(df_schedule)
 # ======= EDITAL =======
 st.header("📖 Edital Verticalizado")
 
-# URL da planilha pública do Google Sheets
-sheet_url = "https://docs.google.com/spreadsheets/d/1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg/export?format=csv&id=1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg&gid=0"
+# --- GOOGLE SHEETS COM GSPREAD ---
+# Caminho do JSON da Service Account
+SERVICE_ACCOUNT_FILE = "credenciais.json"  # coloque aqui o seu arquivo
 
-# Carregar dados com requests + io.StringIO
+# Conectar ao Google Sheets
+creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
+client = gspread.authorize(creds)
+
+# Abrir planilha pelo ID
+SHEET_ID = "1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg"
+sheet = client.open_by_key(SHEET_ID)
+worksheet = sheet.sheet1
+
+# Carregar dados para DataFrame
 if "syllabus" not in st.session_state:
-    response = requests.get(sheet_url)
-    response.raise_for_status()  # Garante que a requisição deu certo
-    st.session_state.syllabus = pd.read_csv(io.StringIO(response.text))
+    data = worksheet.get_all_records()
+    st.session_state.syllabus = pd.DataFrame(data)
 
 # --- FILTROS ---
 st.subheader("Filtrar por:")
