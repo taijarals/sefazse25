@@ -70,9 +70,13 @@ sheet_url = "https://docs.google.com/spreadsheets/d/1ZgAKqgdc2E1Y2HPcpplgimEq3MC
 
 # Carregar dados da planilha pública
 if "syllabus" not in st.session_state:
-    response = requests.get(sheet_url)
-    response.raise_for_status()
-    st.session_state.syllabus = pd.read_csv(io.StringIO(response.text))
+    st.session_state.syllabus = pd.read_csv(sheet_url)
+
+# Carregar dados da planilha pública
+#if "syllabus" not in st.session_state:
+#    response = requests.get(sheet_url)
+#    response.raise_for_status()
+#    st.session_state.syllabus = pd.read_csv(io.StringIO(response.text))
 
 # --- FILTROS ---
 st.subheader("Filtrar por:")
