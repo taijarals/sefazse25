@@ -66,7 +66,7 @@ st.dataframe(df_schedule)
 st.header("📖 Edital Verticalizado")
 
 # URL de exportação CSV da planilha pública
-sheet_url = "https://docs.google.com/spreadsheets/d/1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg/export?format=csv&id=1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg&gid=0"
+sheet_url = "https://docs.google.com/spreadsheets/d/1ZgAKqgdc2E1Y2HPcpplgimEq3MCQfAh9jsasJILafGg/gviz/tq?tqx=out:csv&gid=1932186678"
 
 # Carregar dados da planilha pública
 if "syllabus" not in st.session_state:
