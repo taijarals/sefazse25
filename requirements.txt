@@ -4,3 +4,4 @@ plotly
 pymongo
 gspread
 pyspark
+sqlalchemy
