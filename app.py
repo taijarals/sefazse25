@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from datetime import date
-from services.supabase_client import supabase
+from supabase_client import supabase
 
 # Configuração da página
 st.set_page_config(page_title="Plano de Voo: Auditor TI SEFAZ/SE", layout="wide")
