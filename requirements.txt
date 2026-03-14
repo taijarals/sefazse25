@@ -1,7 +1,4 @@
 streamlit
 pandas
 plotly
-pymongo
-gspread
-pyspark
-sqlalchemy
+supabase
